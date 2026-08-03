@@ -2,6 +2,12 @@
 
 SIMulation Buffered Animation
 
+# SIMBA
+
+📖 Documentation
+
+https://multi2mech.github.io/SIMBA/
+
 ## Install in Unity
 
 Use Package Manager:
