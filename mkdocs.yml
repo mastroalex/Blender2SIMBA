@@ -1,12 +1,48 @@
 site_name: SIMBA
+site_description: SIMulation Buffered Animation
+site_author: Alessandro Mastrofini
+repo_url: https://github.com/multi2mech/SIMBA
+repo_name: multi2mech/SIMBA
+
 theme:
   name: material
+  logo: assets/logo.png
+  favicon: assets/favicon.png
+
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - admonition
+  - tables
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+
 nav:
   - Home: index.md
-  - Installation: installation.md
-  - Getting Started: getting_started.md
-  - HDF5 Format: hdf5_format.md
-  - Binary Format: binary_format.md
-  - Unity API: unity_api.md
-  - Python Converter: python_converter.md
-  - Roadmap: roadmap.md
+
+  - Getting Started:
+      - Installation: GettingStarted/installation.md
+      - Quick Start: GettingStarted/quick_start.md
+
+  - Unity Package:
+      - Components: UnityPackage/components.md
+      - Python Importer: UnityPackage/python_importer.md
+
+  - File Formats:
+      - HDF5: FileFormats/hdf5.md
+      - Binary: FileFormats/binary.md
