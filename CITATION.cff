@@ -1,0 +1,7 @@
+cff-version: 1.0.0
+title: SIMBA
+message: Please cite this repository if you use SIMBA in academic work.
+authors:
+  - family-names: Mastrofini
+    given-names: Alessandro
+license: MIT
