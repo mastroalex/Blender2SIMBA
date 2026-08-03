@@ -1,0 +1,8 @@
+name: simba
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy>=1.24
+  - h5py>=3.9
+  - pip
