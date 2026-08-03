@@ -13,7 +13,7 @@ https://multi2mech.github.io/SIMBA/
 Use Package Manager:
 
 ```
-https://github.com/<your-user>/SIMBA.git?path=/Packages/com.m2m.simba
+https://github.com/multi2mech/SIMBA.git?path=/Packages/com.m2m.simba
 ```
 
 This installs only the Unity package.
