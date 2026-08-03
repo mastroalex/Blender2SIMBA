@@ -8,6 +8,12 @@ SIMulation Buffered Animation
 
 https://multi2mech.github.io/SIMBA/
 
+🎮 Web demo
+
+Interactive demo [https://multi2mech.github.io/SIMBA-web/](https://multi2mech.github.io/SIMBA-web/)
+
+
+
 ## Install in Unity
 
 Use Package Manager:
