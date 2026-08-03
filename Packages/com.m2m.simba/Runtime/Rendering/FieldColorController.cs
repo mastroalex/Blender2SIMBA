@@ -235,40 +235,7 @@ namespace M2M.SIMBA
         }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        private void InitializeVertexColorBackend()
-        {
-            MeshFilter meshFilter =
-                targetRenderer.GetComponent<MeshFilter>();
-
-            if (meshFilter != null)
-            {
-                // mesh crea una copia runtime modificabile.
-                targetMesh = meshFilter.mesh;
-            }
-            else if (targetRenderer is SkinnedMeshRenderer skinned)
-            {
-                targetMesh = skinned.sharedMesh;
-            }
-
-            if (targetMesh == null)
-            {
-                throw new MissingComponentException(
-                    "Il backend WebGL richiede un MeshFilter " +
-                    "o uno SkinnedMeshRenderer.");
-            }
-
-            if (targetMesh.vertexCount != source.ValueCount)
-            {
-                throw new InvalidOperationException(
-                    "Il numero di valori del campo non coincide " +
-                    "con il numero di vertici della mesh. " +
-                    $"Values={source.ValueCount}, " +
-                    $"Vertices={targetMesh.vertexCount}.");
-            }
-
-            encodedVertexColors =
-                new Color32[source.ValueCount];
-        }
+        targetMesh = meshFilter.sharedMesh;
 #else
         private void InitializeGraphicsBufferBackend()
         {
