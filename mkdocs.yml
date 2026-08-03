@@ -1,0 +1,12 @@
+site_name: SIMBA
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Getting Started: getting_started.md
+  - HDF5 Format: hdf5_format.md
+  - Binary Format: binary_format.md
+  - Unity API: unity_api.md
+  - Python Converter: python_converter.md
+  - Roadmap: roadmap.md
