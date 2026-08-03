@@ -1,3 +1,9 @@
-# Components
+# Main Components
 
-Description of all MonoBehaviours.
+- ShellMeshLoader
+- ShellMeshAnimator
+- LineMeshPlayer
+- FieldColorController
+- SIMBAPlayer
+
+These components are created automatically by the importer.

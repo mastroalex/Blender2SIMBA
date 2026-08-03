@@ -1,25 +1,13 @@
-# SIMBA
+# SIMBA Documentation
 
-**SIMulation Buffered Animation (SIMBA)** is an open-source Unity framework for animated scientific simulations.
+Welcome to the SIMBA documentation.
 
-## Installation (recommended)
+## Workflow
 
-Open **Unity Package Manager** → **Add package from Git URL...**
+1. Generate a simulation.
+2. Export an HDF5 file.
+3. Convert to a SIMBA binary.
+4. Import into Unity.
+5. Explore interactively.
 
-```text
-https://github.com/<your-user>/SIMBA.git?path=/Packages/com.m2m.simba
-```
-
-Only the Unity package is downloaded.
-
-## Documentation
-
-- Getting Started
-- Unity Package
-- File Formats
-- Data Generation
-- Examples
-- Advanced
-- Reference
-
-> DOI: **pending Zenodo release**
+> Screenshot placeholder: `images/workflow.png`

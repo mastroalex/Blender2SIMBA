@@ -1,3 +1,10 @@
-# Binary Format
+# SIMBA Binary
 
-Describe SIMBA binary header and payload.
+The binary contains:
+
+- header
+- connectivity
+- animated vertices
+- animated scalar fields
+
+Designed for fast GPU upload inside Unity.
