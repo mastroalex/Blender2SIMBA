@@ -14,7 +14,9 @@ Interactive demo [https://multi2mech.github.io/SIMBA-web/](https://multi2mech.gi
 
 
 
-## Install in Unity
+## Install 
+
+### 1. Install in Unity
 
 Use Package Manager:
 
@@ -23,6 +25,11 @@ https://github.com/multi2mech/SIMBA.git?path=/Packages/com.m2m.simba
 ```
 
 This installs only the Unity package.
+
+### 2. Connect Python executable
+
+[XXXX]
+
 
 The repository also contains:
 
