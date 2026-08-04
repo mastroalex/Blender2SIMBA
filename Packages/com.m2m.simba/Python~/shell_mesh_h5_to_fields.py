@@ -68,20 +68,19 @@ def vertices_shape(a):
     return np.asarray(a, dtype=np.float32)
 
 
-def triangles_shape(a, node_count):
-    a = np.asarray(a)
-    if a.ndim != 2:
-        raise ValueError(f'Connectivity shape {a.shape}')
-    if a.shape[1] < 3 and a.shape[0] >= 3:
-        a = a.T
-    if a.shape[1] < 3:
-        raise ValueError(f'Connectivity shape {a.shape}, expected (n,3)')
-    a = np.asarray(a[:, :3], dtype=np.int64)
-    if a.size and a.min() == 1:
-        a -= 1
-    if a.size == 0 or a.min() < 0 or a.max() >= node_count:
-        raise ValueError('Triangle connectivity out of range')
-    return np.ascontiguousarray(a, dtype=np.int32)
+def triangles_shape(connectivity, node_count):
+    conn = np.asarray(connectivity, dtype=np.int32)
+
+    if conn.size == 0:
+        return np.empty((0, 3), dtype=np.int32)
+
+    if conn.ndim != 2 or conn.shape[1] != 3:
+        raise ValueError(...)
+
+    if conn.min() < 0 or conn.max() >= node_count:
+        raise ValueError("Triangle connectivity out of range")
+
+    return conn
 
 
 def load_group_layout(h5, requested_fields):

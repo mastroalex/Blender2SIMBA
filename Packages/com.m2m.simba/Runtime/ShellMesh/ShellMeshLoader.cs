@@ -99,7 +99,7 @@ namespace M2M.SIMBA
                 {
                     int nv = r.ReadInt32();
                     int nt = r.ReadInt32();
-                    if (nv <= 0 || nt <= 0) throw new InvalidDataException($"Frame {frame}: conteggi non validi.");
+                    // if (nv <= 0 || nt <= 0) throw new InvalidDataException($"Frame {frame}: conteggi non validi.");
                     d.Vertices[frame] = ReadVertices(r, nv);
                     d.FrameTriangles[frame] = ReadInts(r, nt * 3);
                     ReadFieldValues(r, d, frame, nv);
