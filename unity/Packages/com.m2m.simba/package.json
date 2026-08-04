@@ -1,0 +1,26 @@
+{
+  "name": "com.m2m.simba",
+  "displayName": "SIMBA",
+  "version": "1.1.0",
+  "unity": "2022.3",
+  "description": "SIMulation Buffered Animation: a Unity framework, public runtime API, editor importer and HDF5 conversion workflow for animated scientific simulations.",
+  "keywords": [
+    "scientific visualization",
+    "simulation",
+    "animation",
+    "HDF5",
+    "URP",
+    "finite element",
+    "CFD",
+    "VR",
+    "WebGL"
+  ],
+  "author": {
+    "name": "Alessandro Mastrofini"
+  },
+  "dependencies": {
+    "com.unity.render-pipelines.universal": "14.0.11",
+    "com.unity.ugui": "1.0.0"
+  },
+  "samples": []
+}
