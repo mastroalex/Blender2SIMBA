@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0] - 2026-08-04
+
+- Added SIMBA binary v4 with explicit static/dynamic topology mode.
+- Added variable connectivity support for ShellMesh and LineMesh.
+- Standardized v4 headers with `FrameStep` for both geometry types.
+- Kept backward compatibility with v3 static-topology files.
+- Fixed the LineMesh magic to the fixed-width `LNMSH004`.
+
 All notable changes to SIMBA are documented here.
 
 ## [1.0.1] - 2026-08-03

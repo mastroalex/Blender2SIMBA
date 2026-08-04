@@ -5,61 +5,211 @@ using System.Text;
 
 namespace M2M.SIMBA.Editor
 {
+    /// <summary>
+    /// Reads metadata from SIMBA shell/line binary files without loading
+    /// animation payloads.
+    ///
+    /// Supported formats:
+    /// - v3: static topology, legacy layout
+    /// - v4: explicit topology-mode field
+    /// </summary>
     public static class SIMBABinaryHeaderReader
     {
+        private static readonly byte[] ShellV3Magic =
+            Encoding.ASCII.GetBytes("SHMSH003");
+
+        private static readonly byte[] ShellV4Magic =
+            Encoding.ASCII.GetBytes("SHMSH004");
+
+        private static readonly byte[] LineV3Magic =
+            Encoding.ASCII.GetBytes("LNMSH003");
+
+        private static readonly byte[] LegacyLineV3Magic =
+            Encoding.ASCII.GetBytes("LINEM003");
+
+        private static readonly byte[] LineV4Magic =
+            Encoding.ASCII.GetBytes("LNMSH004");
+
+        private static readonly byte[] LegacyLineV4Magic =
+            Encoding.ASCII.GetBytes("LINEM004");
+
         public static SIMBABinaryHeader Read(string path)
         {
-            using FileStream stream = File.OpenRead(path);
-            using BinaryReader reader = new BinaryReader(stream, Encoding.UTF8, false);
-            string magic = Encoding.ASCII.GetString(reader.ReadBytes(8));
-            int version = reader.ReadInt32();
-            if (version != 3)
-                throw new InvalidDataException($"SIMBA binary version {version} is not supported. Re-export with the v0.2 Python converter.");
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException(
+                    "A binary path is required.", nameof(path));
 
-            GeometryType storedType = (GeometryType)reader.ReadInt32();
-            if (magic == "SHMSH003" && storedType != GeometryType.ShellMesh)
-                throw new InvalidDataException("ShellMesh magic and GeometryType do not match.");
-            if (magic == "LINEM003" && storedType != GeometryType.LineMesh)
-                throw new InvalidDataException("LineMesh magic and GeometryType do not match.");
-            if (magic != "SHMSH003" && magic != "LINEM003")
-                throw new InvalidDataException($"Unknown SIMBA magic '{magic}'.");
+            if (!File.Exists(path))
+                throw new FileNotFoundException(
+                    "SIMBA binary file not found.", path);
+
+            using FileStream stream = File.OpenRead(path);
+            using BinaryReader reader =
+                new BinaryReader(stream, Encoding.UTF8, false);
+
+            byte[] magic = reader.ReadBytes(8);
+            if (magic.Length != 8)
+                throw new EndOfStreamException(
+                    "The file is too short to contain a SIMBA header.");
+
+            bool shell;
+            bool explicitTopology;
+
+            if (Matches(magic, ShellV3Magic))
+            {
+                shell = true;
+                explicitTopology = false;
+            }
+            else if (Matches(magic, ShellV4Magic))
+            {
+                shell = true;
+                explicitTopology = true;
+            }
+            else if (Matches(magic, LineV3Magic) ||
+                     Matches(magic, LegacyLineV3Magic))
+            {
+                shell = false;
+                explicitTopology = false;
+            }
+            else if (Matches(magic, LineV4Magic) ||
+                     Matches(magic, LegacyLineV4Magic))
+            {
+                shell = false;
+                explicitTopology = true;
+            }
+            else
+            {
+                throw new InvalidDataException(
+                    $"Unsupported SIMBA magic '{Encoding.ASCII.GetString(magic)}'.");
+            }
 
             SIMBABinaryHeader header = new SIMBABinaryHeader
             {
-                SourcePath = path,
-                Version = version,
-                GeometryType = storedType,
-                FrameCount = reader.ReadInt32(),
-                ValueCount = reader.ReadInt32(),
-                ElementCount = reader.ReadInt32(),
-                FramesPerSecond = reader.ReadSingle()
+                SourcePath = Path.GetFullPath(path),
+                Version = reader.ReadInt32(),
+                GeometryType = (GeometryType)reader.ReadInt32()
             };
 
-            if (storedType == GeometryType.LineMesh)
+            if (explicitTopology)
+            {
+                int rawMode = reader.ReadInt32();
+                if (!Enum.IsDefined(typeof(SIMBATopologyMode), rawMode))
+                    throw new InvalidDataException(
+                        $"Invalid topology mode {rawMode}.");
+
+                header.TopologyMode =
+                    (SIMBATopologyMode)rawMode;
+            }
+            else
+            {
+                header.TopologyMode =
+                    SIMBATopologyMode.Static;
+            }
+
+            header.FrameCount = reader.ReadInt32();
+            header.ValueCount = reader.ReadInt32();
+            header.ElementCount = reader.ReadInt32();
+            header.FramesPerSecond = reader.ReadSingle();
+
+            if (explicitTopology)
                 header.FrameStep = reader.ReadInt32();
+            else
+                header.FrameStep = 1;
 
             int fieldCount = reader.ReadInt32();
-            if (header.FrameCount <= 0 || header.ValueCount <= 0 || header.ElementCount <= 0 || fieldCount <= 0)
-                throw new InvalidDataException("The SIMBA header contains invalid counts.");
+
+            ValidateHeader(header, fieldCount, shell);
 
             for (int i = 0; i < fieldCount; i++)
             {
                 header.FieldNames.Add(ReadString(reader));
                 header.FieldUnits.Add(ReadString(reader));
-                reader.ReadSingle(); // global min
-                reader.ReadSingle(); // global max
+
+                // Global minimum and maximum are part of field metadata.
+                reader.ReadSingle();
+                reader.ReadSingle();
             }
+
             return header;
+        }
+
+        private static void ValidateHeader(
+            SIMBABinaryHeader header,
+            int fieldCount,
+            bool shellMagic)
+        {
+            if (header.Version < 3 || header.Version > 4)
+                throw new InvalidDataException(
+                    $"Unsupported SIMBA version {header.Version}.");
+
+            if (header.FrameCount <= 0)
+                throw new InvalidDataException(
+                    "Frame count must be positive.");
+
+            if (header.ValueCount <= 0)
+                throw new InvalidDataException(
+                    "Value count must be positive.");
+
+            if (header.ElementCount < 0)
+                throw new InvalidDataException(
+                    "Element count cannot be negative.");
+
+            if (!(header.FramesPerSecond > 0f) ||
+                float.IsNaN(header.FramesPerSecond) ||
+                float.IsInfinity(header.FramesPerSecond))
+            {
+                throw new InvalidDataException(
+                    "Frames per second must be finite and positive.");
+            }
+
+            if (fieldCount < 0 || fieldCount > 4096)
+                throw new InvalidDataException(
+                    $"Invalid field count {fieldCount}.");
+
+            GeometryType expected =
+                shellMagic
+                    ? GeometryType.ShellMesh
+                    : GeometryType.LineMesh;
+
+            if (header.GeometryType != expected)
+            {
+                throw new InvalidDataException(
+                    $"Magic identifies {expected}, but the header " +
+                    $"contains {header.GeometryType}.");
+            }
+
         }
 
         private static string ReadString(BinaryReader reader)
         {
-            int length = reader.ReadInt32();
-            if (length < 0 || length > 1024 * 1024)
-                throw new InvalidDataException("Invalid string length in SIMBA header.");
-            byte[] bytes = reader.ReadBytes(length);
-            if (bytes.Length != length) throw new EndOfStreamException();
+            int byteCount = reader.ReadInt32();
+
+            if (byteCount < 0 || byteCount > 1024 * 1024)
+                throw new InvalidDataException(
+                    $"Invalid UTF-8 string length {byteCount}.");
+
+            byte[] bytes = reader.ReadBytes(byteCount);
+            if (bytes.Length != byteCount)
+                throw new EndOfStreamException(
+                    "Unexpected end of file while reading a string.");
+
             return Encoding.UTF8.GetString(bytes);
+        }
+
+        private static bool Matches(
+            byte[] value,
+            byte[] expected)
+        {
+            if (value.Length != expected.Length)
+                return false;
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (value[i] != expected[i])
+                    return false;
+            }
+
+            return true;
         }
     }
 }
