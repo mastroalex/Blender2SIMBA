@@ -1,0 +1,47 @@
+cff-version: 1.2.0
+
+title: "Blender2SIMBA"
+
+message: "If you use Blender2SIMBA in academic work, please cite this software."
+
+type: software
+
+authors:
+  - family-names: Mastrofini
+    given-names: Alessandro
+    affiliation: "Multiscale and Multiphysics Mechanics Group (M2M), Department of Civil Engineering and Computer Science Engineering, University of Rome Tor Vergata, Rome, Italy"
+    orcid: "https://orcid.org/0009-0004-2212-698X"
+
+license: MIT
+
+repository-code: "https://github.com/multi2mech/Blender2SIMBA"
+
+url: "https://github.com/multi2mech/Blender2SIMBA"
+
+repository-artifact: "https://github.com/multi2mech/Blender2SIMBA/releases"
+
+abstract: >
+  Blender2SIMBA is the official Blender export pipeline for the SIMBA
+  (SIMulation Buffered Animation) framework. The addon evaluates Blender
+  geometry, including Geometry Nodes, modifiers, and dynamic topology,
+  and exports an intermediate HDF5 representation for conversion into
+  optimized SIMBA runtime binaries for Unity.
+
+keywords:
+  - Blender
+  - Unity
+  - Scientific Visualization
+  - Simulation
+  - Geometry Nodes
+  - Animation
+  - HDF5
+  - Biomedical Engineering
+
+version: "1.0.0"
+
+date-released: "2026-08-05"
+
+references:
+  - type: software
+    title: "SIMBA"
+    repository-code: "https://github.com/multi2mech/SIMBA"

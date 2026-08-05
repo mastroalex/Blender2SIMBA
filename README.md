@@ -156,3 +156,22 @@ Compatible with
 - Scalar field export
 - Native SIMBA package export
 
+# Citation
+
+If you use **Blender2SIMBA** to generate data for academic research or scientific publications, please cite this software.
+
+```text
+Mastrofini A.
+
+Blender2SIMBA:
+Official Blender export pipeline for the SIMBA framework.
+
+Multiscale and Multiphysics Mechanics Group (M2M)
+Department of Civil Engineering and Computer Science Engineering
+University of Rome Tor Vergata
+Rome, Italy
+
+https://github.com/multi2mech/Blender2SIMBA
+```
+
+A `CITATION.cff` file is included in this repository for automatic citation support on GitHub.
