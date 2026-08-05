@@ -22,7 +22,7 @@ The addon evaluates the complete dependency graph, making it compatible with Geo
   </a>
 </p>
 
-**Blender2SIMBA** is the official Blender export pipeline for **SIMBA** (**SIM**ulation **B**uffered **A**nimation), an open-source Unity framework for interactive visualization of animated scientific simulations.
+**Blender2SIMBA** is the official Blender export pipeline for **SIMBA** (**SIM**ulation **B**uffered **A**nimation), an open-source Unity framework for interactive visualization of animated scientific simulations create by  the [multi2mech](https://github.com/multi2mech) research group.
 
 ➡️ **SIMBA GitHub Repository:**  https://github.com/multi2mech/SIMBA
 
