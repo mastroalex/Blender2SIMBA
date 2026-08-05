@@ -95,9 +95,23 @@ The addon appears under
 View3D → Sidebar → SIMBA
 ```
 
+<p align="center">
+  <img src="documentation/gif/install.gif" width="900">
+</p>
+
 ## How to use?
 
+Export from Blender:
 
+<p align="center">
+  <img src="documentation/gif/blender.gif" width="900">
+</p>
+
+Import in Unity:
+
+<p align="center">
+  <img src="documentation/gif/unity.gif" width="900">
+</p>
 
 ## Supported Blender Features
 
